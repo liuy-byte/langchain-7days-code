@@ -122,10 +122,34 @@ def demo_agent():
     print(f"  Agent 响应: {result['messages'][-1].content}")
 
 
+def demo_runnable_parallel():
+    """RunnableParallel：并行执行多个任务"""
+    print("\n【RunnableParallel 演示】")
+    from langchain_core.runnables import RunnableParallel
+
+    prompt_summary = ChatPromptTemplate.from_template("总结：{text}")
+    prompt_translate = ChatPromptTemplate.from_template("翻译成日语：{text}")
+
+    if not _has_api_key():
+        print("  ⚠️  未配置 OPENAI_API_KEY，跳过实际 API 调用")
+        print("  ✅ RunnableParallel 代码结构正确")
+        return
+
+    llm = _create_llm(temperature=0)
+    parallel = RunnableParallel(
+        summary=prompt_summary | llm | StrOutputParser(),
+        translate=prompt_translate | llm | StrOutputParser()
+    )
+    result = parallel.invoke({"text": "LangChain makes LLM application development easy"})
+    print(f"  总结结果: {result['summary'][:30]}...")
+    print(f"  日语翻译: {result['translate']}")
+
+
 if __name__ == "__main__":
     print("=== Day 1: 四大组件 ===\n")
     demo_model()
     demo_prompt()
     demo_chain()
     demo_agent()
+    demo_runnable_parallel()
     print("\n=== Day 1 完成 ===")

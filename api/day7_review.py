@@ -5,13 +5,14 @@ Day 7: 全景回顾 - 整合所有模块
 """
 
 import os
+import sys
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.tools import tool
 from langchain.agents import create_agent
-from langchain_classic.memory import ConversationSummaryBufferMemory
+from langchain_classic.memory import ConversationBufferMemory, ConversationSummaryBufferMemory
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
 
@@ -79,13 +80,41 @@ def build_complete_rag_with_memory(persist_directory: str = "./chroma_db"):
 def demo_integration():
     """模块整合演示"""
     print("\n【模块整合演示】")
+
+    modules = {
+        "Model I/O": "ChatOpenAI, PromptTemplate, OutputParser",
+        "Retrieval": "DocumentLoader, Embedding, VectorStore",
+        "Agent": "create_agent, @tool, bind_tools",
+        "Memory": "ConversationBufferMemory, ConversationSummaryBufferMemory",
+        "LCEL": "| 管道操作符, RunnableParallel, Callbacks"
+    }
+
     print("  本系列涵盖的核心模块:")
-    print("    - Model I/O: ChatOpenAI, PromptTemplate, OutputParser")
-    print("    - Retrieval: DocumentLoader, Embedding, VectorStore")
-    print("    - Agent: create_agent, @tool, bind_tools")
-    print("    - Memory: ConversationBufferMemory, ConversationSummaryBufferMemory")
-    print("    - LCEL: | 管道操作符, RunnableParallel, Callbacks")
-    print("  ✅ 全模块整合结构正确")
+    for name, components in modules.items():
+        print(f"    - {name}: {components}")
+
+    if not _has_api_key():
+        print("  ❌ 错误: 未配置 OPENAI_API_KEY 环境变量")
+        print("  请设置: export OPENAI_API_KEY=your-api-key")
+        sys.exit(1)
+
+    # 实际执行演示
+    print("\n  实际执行演示:")
+    llm = _create_llm()
+
+    # 1. Model I/O
+    prompt = ChatPromptTemplate.from_template("用一句话解释{topic}")
+    chain = prompt | llm | StrOutputParser()
+    result = chain.invoke({"topic": "LangChain"})
+    print(f"    Model I/O: {result}")
+
+    # 2. Memory
+    memory = ConversationBufferMemory()
+    memory.save_context({"input": "Hello"}, {"output": "Hi there!"})
+    history = memory.load_memory_variables({})["history"]
+    print(f"    Memory: 已存储 {len(history.split(chr(10)))//2} 轮对话")
+
+    print("  ✅ 全模块整合验证通过")
 
 
 if __name__ == "__main__":

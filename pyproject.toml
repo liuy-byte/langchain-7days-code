@@ -15,6 +15,7 @@ dependencies = [
     "langchain-anthropic>=0.3.0",
     "faiss-cpu>=1.7.0",
     "pypdf>=4.0.0",
+    "beautifulsoup4>=4.14.3",
 ]
 
 [project.optional-dependencies]
