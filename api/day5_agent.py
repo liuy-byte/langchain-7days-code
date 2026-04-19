@@ -17,8 +17,10 @@ except ImportError:
 
 try:
     from langchain_community.tools import WikipediaQueryRun
+    from langchain_community.tools.wikipedia.tool import WikipediaAPIWrapper
 except ImportError:
     WikipediaQueryRun = None
+    WikipediaAPIWrapper = None
 
 _api_key = os.environ.get("OPENAI_API_KEY", "")
 _base_url = os.environ.get("OPENAI_BASE_URL", "https://api.siliconflow.cn/v1")
@@ -139,9 +141,10 @@ def demo_builtin_tools():
             print(f"\n  ⚠️  DuckDuckGoSearchRun 需要额外依赖: {e}")
             print("     安装命令: pip install ddgs")
 
-    if WikipediaQueryRun:
+    if WikipediaQueryRun and WikipediaAPIWrapper:
         try:
-            wiki = WikipediaQueryRun()
+            wiki_wrapper = WikipediaAPIWrapper()
+            wiki = WikipediaQueryRun(api_wrapper=wiki_wrapper)
             result = wiki.run("Python (programming language)")
             print(f"\n  Wikipedia 结果示例: {result[:100]}...")
         except (ImportError, Exception) as e:

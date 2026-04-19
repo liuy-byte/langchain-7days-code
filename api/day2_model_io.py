@@ -108,17 +108,22 @@ def demo_json_output_parser():
     print(f"  Parser: {type(parser).__name__}")
 
     if not _has_api_key():
-        print("  ❌ 错误: 未配置 OPENAI_API_KEY 环境变量")
-        print("  请设置: export OPENAI_API_KEY=your-api-key")
-        sys.exit(1)
+        print("  ⚠️  未配置 OPENAI_API_KEY，跳过实际 API 调用")
+        return
 
+    # 使用 partial_variables 注入格式说明
     prompt = PromptTemplate.from_template(
-        "生成一个{cuisine}风味的简单甜点食谱"
+        "生成一个{cuisine}风味的简单甜点食谱。{format_instructions}",
+        partial_variables={"format_instructions": parser.get_format_instructions()}
     )
     chain = prompt | _create_llm(temperature=0) | parser
-    result = chain.invoke({"cuisine": "法式"})
-    print(f"  解析结果: {result}")
-    print(f"  类型: {type(result)}")
+    try:
+        result = chain.invoke({"cuisine": "法式"})
+        print(f"  解析结果: {result}")
+        print(f"  类型: {type(result)}")
+    except Exception as e:
+        print(f"  ⚠️  JsonOutputParser 调用失败: {e}")
+        print("  （这是模型未返回有效 JSON，可能是模型不支持或 prompt 冲突）")
 
 
 def demo_stream():
