@@ -1,0 +1,28 @@
+{
+  "mode": "api",
+  "llm": {
+    "provider": "siliconflow",
+    "model": "Pro/MiniMaxAI/MiniMax-M2.5",
+    "temperature": 0.7,
+    "base_url": "https://api.siliconflow.cn/v1",
+    "api_key": ""
+  },
+  "embedding": {
+    "provider": "siliconflow",
+    "model": "BAAI/bge-m3",
+    "base_url": "https://api.siliconflow.cn/v1",
+    "api_key": ""
+  },
+  "vectorstore": {
+    "provider": "chroma",
+    "persist_dir": "./chroma_db"
+  },
+  "search": {
+    "provider": "none",
+    "api_key": ""
+  },
+  "memory": {
+    "max_history": 20,
+    "summary_enabled": false
+  }
+}
