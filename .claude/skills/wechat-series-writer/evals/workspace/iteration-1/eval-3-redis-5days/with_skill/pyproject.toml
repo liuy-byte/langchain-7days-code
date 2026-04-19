@@ -1,0 +1,18 @@
+[project]
+name = "redis-5days"
+version = "0.1.0"
+description = "Redis 5天系列教程配套代码"
+requires-python = ">=3.10"
+dependencies = [
+    "redis>=6.0.0",
+    "fakeredis>=2.20.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
