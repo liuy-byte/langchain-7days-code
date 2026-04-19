@@ -22,7 +22,7 @@ except ImportError:
 
 _api_key = os.environ.get("OPENAI_API_KEY", "")
 _base_url = os.environ.get("OPENAI_BASE_URL", "https://api.siliconflow.cn/v1")
-_default_model = os.environ.get("OPENAI_MODEL", "deepseek-ai/DeepSeek-V3")
+_default_model = os.environ.get("OPENAI_MODEL", "Pro/MiniMaxAI/MiniMax-M2.5")
 
 
 def _has_api_key():
