@@ -6,10 +6,10 @@ Day 7: 全景回顾 - 整合所有模块
 
 import os
 import sys
+from operator import itemgetter
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import RunnablePassthrough
 from langchain_core.tools import tool
 from langchain.agents import create_agent
 from langchain_classic.memory import ConversationBufferMemory, ConversationSummaryBufferMemory
@@ -65,9 +65,9 @@ def build_complete_rag_with_memory(persist_directory: str = "./chroma_db"):
 
     rag_chain = (
         {
-            "context": retriever | (lambda docs: "\n\n".join(d.page_content for d in docs)),
-            "history": RunnablePassthrough(),
-            "question": RunnablePassthrough()
+            "context": itemgetter("question") | retriever | (lambda docs: "\n\n".join(d.page_content for d in docs)),
+            "history": itemgetter("history"),
+            "question": itemgetter("question"),
         }
         | prompt
         | llm

@@ -157,12 +157,12 @@ def demo_stdout_callback_handler():
 def demo_set_debug():
     """set_debug(True)：全局调试模式"""
     print("\n【set_debug(True) 全局调试演示】")
-    import langchain
-    langchain.debug = True
+    from langchain_core.globals import set_debug
+    set_debug(True)
     print("  ✅ set_debug(True) 已启用（全局调试模式）")
 
     if not _has_api_key():
-        langchain.debug = False
+        set_debug(False)
         print("  ❌ 错误: 未配置 OPENAI_API_KEY 环境变量")
         print("  请设置: export OPENAI_API_KEY=your-api-key")
         sys.exit(1)
@@ -170,7 +170,7 @@ def demo_set_debug():
     chain = ChatPromptTemplate.from_template("用一句话解释：{topic}") | _create_llm()
     print("  执行链（调试模式已开启，应看到详细日志）:")
     result = chain.invoke({"topic": "LangChain"})
-    langchain.debug = False
+    set_debug(False)
     print(f"  最终响应: {result.content}")
     print("  ✅ 调试模式已关闭")
 

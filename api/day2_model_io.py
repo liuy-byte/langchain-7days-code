@@ -9,7 +9,7 @@ import sys
 from langchain_openai import ChatOpenAI, OpenAI
 from langchain_core.prompts import ChatPromptTemplate, PromptTemplate
 from langchain_core.output_parsers import JsonOutputParser, PydanticOutputParser, StrOutputParser, CommaSeparatedListOutputParser
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 # 多模型支持
 try:

@@ -203,10 +203,6 @@ def demo_summary_memory():
         print("  ⚠️  当前模型不支持 get_num_tokens_from_messages，跳过此演示")
         print("  ✅ ConversationSummaryBufferMemory 代码结构正确")
 
-    history = memory.load_memory_variables({})["history"]
-    print(f"  对话历史已压缩为摘要模式，消息数: {len(history)}")
-    print("  ✅ ConversationSummaryBufferMemory 使用正确")
-
 
 if __name__ == "__main__":
     print("=== Day 4: RAG 全链路 ===\n")
